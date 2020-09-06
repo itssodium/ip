@@ -33,7 +33,7 @@ abstract public class AddCommand extends Command {
      * @return String that informs task is added into taskList
      */
     protected static String stringToUpdateTaskList(Task task, TaskList taskList){
-        return "  Got it. I've added this task:\n  " + task.toString() + "\n" +
+        return "  Got it. I've added this task:\n  " + task.toString() + "\n" + //Task added message
                 "  Now you have " + taskList.getAllTasks().size() + " tasks in the list.";
     }
 

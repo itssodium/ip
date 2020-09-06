@@ -32,13 +32,13 @@ public class DoneCommand extends Command {
      */
     public String execute(TaskList tasks, Ui ui, Storage storage) throws DukeException {
         if (isNumberAbsent()) {
-            throw new DoneException(true, false);
+            throw new DoneException(true, false); //when number is absent
         }else{
             int ID = Integer.parseInt(commandDescription.substring(5));
             if (isNumberNotInList(ID, tasks)) {
-                throw new DoneException(false, true);
+                throw new DoneException(false, true); //when number is not in list
             } else {
-                return rewrite(storage, tasks, ID);
+                return rewrite(storage, tasks, ID); //where the file in Storage is updated and TaskList is updated
             }
         }
     }
@@ -48,7 +48,7 @@ public class DoneCommand extends Command {
      * @return true is the number is absent and false if number is present.
      */
     private boolean isNumberAbsent(){
-        return commandDescription.length() == 4 || commandDescription.length() == 5;
+        return commandDescription.length() == 4 || commandDescription.length() == 5; // keyword is absent if user input is only 4/5
     }
 
     /**
@@ -59,7 +59,7 @@ public class DoneCommand extends Command {
      * @return true if the task is not present in list.
      */
     private boolean isNumberNotInList(int ID, TaskList tasks){
-        return ID > tasks.getAllTasks().size();
+        return ID > tasks.getAllTasks().size(); //since ID cannot be more that number of tasks present
     }
 
     /**
@@ -72,7 +72,7 @@ public class DoneCommand extends Command {
     private void updateTaskList(String newList, Storage storage) throws FileAbsentException {
         try {
             FileWriter fw = new FileWriter(storage.getFilePath());
-            fw.write(newList);
+            fw.write(newList); //updates task list to newList since one task is marked as done
             fw.close();
         } catch (IOException i) {
             throw new FileAbsentException(storage.getFilePath());
@@ -87,10 +87,10 @@ public class DoneCommand extends Command {
      * @return the string for the new task list
      */
     private String newTaskList(TaskList tasks, int ID){
-        tasks.getAllTasks().remove(ID - 1);
+        tasks.getAllTasks().get(ID - 1).setDone(true);
         String s = "";
         for(int i = 0; i < tasks.getAllTasks().size(); i++){
-            s = s + tasks.getAllTasks().get(i).inputListFormat() + "\n";
+            s = s + tasks.getAllTasks().get(i).inputListFormat() + "\n"; //new taskList String since done
         }
         return s;
     }
@@ -104,7 +104,7 @@ public class DoneCommand extends Command {
      */
     private String doneMessage(TaskList tasks, int ID){
         return "   Nice! I've marked this task as done:\n" +
-                "   " + tasks.getAllTasks().get(ID - 1).toString();
+                "   " + tasks.getAllTasks().get(ID - 1).toString(); //gives the doneMessage
     }
     /**
      * This returns the string that the task has been deleted adn also updated the TakList.
@@ -117,10 +117,10 @@ public class DoneCommand extends Command {
      */
     private String rewrite(Storage storage, TaskList tasks, int ID) throws DukeException {
         tasks.getAllTasks().get(ID - 1).setDone(true);
-        String s = newTaskList(tasks, ID);
+        String s = newTaskList(tasks, ID); //new List for storage file
         try {
-            updateTaskList(s, storage);
-            return doneMessage(tasks, ID);
+            updateTaskList(s, storage); //updates the TaskList and the file in storage file
+            return doneMessage(tasks, ID); // returns done message
         } catch (FileAbsentException f) {
             throw new FileAbsentException(storage.getFilePath());
         }

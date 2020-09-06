@@ -40,12 +40,12 @@ public class DeadlineCommand extends AddCommand {
      */
     public String execute(TaskList tasks, Ui ui, Storage storage) throws DukeException{
         if (isDescriptionAbsent()) {
-            throw new DeadlineException(true, false, false);
+            throw new DeadlineException(true, false, false); //Since description is absent
         }
-        String[] dataSplit = splitData();
-        Deadline d = deadlineTask(dataSplit[0], dataSplit[1]);
+        String[] dataSplit = splitData(); //Split into description name and time and/or date
+        Deadline d = deadlineTask(dataSplit[0], dataSplit[1]); //gives the Deadline
         try {
-            return updateTaskList(storage, d, tasks);
+            return updateTaskList(storage, d, tasks); //updates the tasks and file in storage
         }catch (IOException i){
             throw new FileAbsentException(storage.getFilePath());
         }
@@ -57,7 +57,7 @@ public class DeadlineCommand extends AddCommand {
      * @return true if description absent and false otherwise.
      */
     private boolean isDescriptionAbsent(){
-        return commandDescription.length() == 8 || commandDescription.length() == 9;
+        return commandDescription.length() == 8 || commandDescription.length() == 9; // since description can only appear after length of 9
     }
 
     /**
@@ -75,7 +75,7 @@ public class DeadlineCommand extends AddCommand {
         for (int i = 8; i < commandDescription.length(); i++) {
             if (commandDescription.charAt(i) == '/') {
                 index = i;
-                time = true;
+                time = true;//since date appears after /
                 break;
             }
             s = s + commandDescription.charAt(i);
@@ -99,15 +99,15 @@ public class DeadlineCommand extends AddCommand {
     private static Deadline deadlineTask(String name, String dateTime) throws DeadlineException {
         Deadline e;
         try{
-            LocalDate parsedDate = stringToLocalDate(dateTime);
+            LocalDate parsedDate = stringToLocalDate(dateTime); //converts string to date
             e = new Deadline(name, parsedDate.format(DateTimeFormatter.ofPattern("dd LLL yyyy")));
         }catch (DateTimeException d) {
             try {
-                LocalDateTime parsedDate = stringToLocalDateTime(dateTime);
+                LocalDateTime parsedDate = stringToLocalDateTime(dateTime);//converts string to date and time
                 e = new Deadline(name, parsedDate.format(DateTimeFormatter.ofPattern("dd LLL yyyy, HH:mm")));
             } catch (DateTimeException g) {
                 try {
-                    LocalTime parsedDate = stringToLocalTime(dateTime);
+                    LocalTime parsedDate = stringToLocalTime(dateTime);//converts string to date
                     e = new Deadline(name, parsedDate.format(DateTimeFormatter.ofPattern("HH:mm")));
                 } catch (DateTimeException f) {
                     throw new DeadlineException(false, true, false);

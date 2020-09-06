@@ -40,7 +40,7 @@ public class ListCommand extends Command {
     private String listMessage(TaskList tasks){
         String s = "";
         for(int i = 0; i < tasks.getAllTasks().size(); i++){
-            System.out.println("  " + tasks.getAllTasks().get(i));
+            System.out.println("  " + tasks.getAllTasks().get(i)); // concatenates all the string representation of Tasks TaskList
             s = s + "\n" + "  " + tasks.getAllTasks().get(i);
         }
         return s;

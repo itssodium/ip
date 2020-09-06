@@ -52,7 +52,7 @@ public class TodoCommand extends AddCommand{
      * @return true if description absent and false otherwise.
      */
     private boolean isDescriptionAbsent(){
-        return commandDescription.length() == 4 || commandDescription.length() == 5;
+        return commandDescription.length() == 4 || commandDescription.length() == 5; //since if the description is absent length is only 4 or 5
     }
 
     /**

@@ -34,13 +34,13 @@ public class DeleteCommand extends Command {
     @Override
     public String execute(TaskList tasks, Ui ui, Storage storage) throws DukeException {
         if (isNumberAbsent()) {
-            throw new DeleteException(true, false);
+            throw new DeleteException(true, false); //when number is absent
         }else{
             int ID = Integer.parseInt(commandDescription.substring(7));
             if (isNumberNotInList(ID, tasks)) {
-                throw new DeleteException(false, true);
+                throw new DeleteException(false, true); //when ID is more than number of tasks in list
             }else {
-                return rewrite(storage, tasks, ID);
+                return rewrite(storage, tasks, ID); //to update TaskList and file in Storage
             }
         }
     }
@@ -51,7 +51,7 @@ public class DeleteCommand extends Command {
      * @return true is the number is absent and false if number is present.
      */
     private boolean isNumberAbsent(){
-        return commandDescription.length() == 4 || commandDescription.length() == 5;
+        return commandDescription.length() == 4 || commandDescription.length() == 5; //since the delete number appears after length of 5
     }
 
     /**
@@ -62,7 +62,7 @@ public class DeleteCommand extends Command {
      * @return true if the task is not present in list.
      */
     private boolean isNumberNotInList(int ID, TaskList tasks){
-        return ID > tasks.getAllTasks().size();
+        return ID > tasks.getAllTasks().size(); //ID cannot be more than length of tasks
     }
 
     /**
@@ -73,7 +73,7 @@ public class DeleteCommand extends Command {
      * @return String informing that the task is deleted.
      */
     private String deleteTaskString(TaskList tasks, int ID){
-        return "   Noted. I've removed this task:\n" +
+        return "   Noted. I've removed this task:\n" + // gives delete message
                 "   " + tasks.getAllTasks().get(ID - 1).toString() + "\n" +
                 "  Now you have " + (tasks.getAllTasks().size() - 1) + " tasks in the list.";
     }
@@ -87,7 +87,7 @@ public class DeleteCommand extends Command {
      */
     private void updateTaskList(String newList, Storage storage) throws FileAbsentException {
         try {
-            FileWriter fw = new FileWriter(storage.getFilePath());
+            FileWriter fw = new FileWriter(storage.getFilePath()); //updates the file in Storage with new String
             fw.write(newList);
             fw.close();
         } catch (IOException i) {
@@ -106,7 +106,7 @@ public class DeleteCommand extends Command {
         tasks.getAllTasks().remove(ID - 1);
         String s = "";
         for(int i = 0; i < tasks.getAllTasks().size(); i++){
-            s = s + tasks.getAllTasks().get(i).inputListFormat() + "\n";
+            s = s + tasks.getAllTasks().get(i).inputListFormat() + "\n"; // Task of ID is deleted and then the String of tasks is updated
         }
         return s;
     }

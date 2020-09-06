@@ -41,7 +41,7 @@ public class FindCommand extends Command {
             throw new FindException(false, true, "");
         }else{
             String find = commandDescription.substring(5);
-            String[] strings = find.split(" ", -2);
+            String[] strings = find.split(" ", -2); // keywords split into different Strings
             setTasks(strings, tasks);
             if(this.tasks.size() == 0){
                 throw new FindException(true, false, find);
@@ -67,14 +67,14 @@ public class FindCommand extends Command {
             for(int j = 0; j < strings.length; j++){
                 String s = strings[j];
                 for(int k = 0; k < comp.length; k++){
-                    if(comp[k].equals(s)){
-                        contains = true;
+                    if(comp[k].equals(s)){ //checks whether Task name/description contains keywords given by user
+                        contains = true;  //then assigns contains true if that is the case
                         break;
                     }
                 }
             }
             if(contains) {
-                this.tasks.add(task);
+                this.tasks.add(task); //if contains is true, Task is added to ArrayList of tasks.
             }
         }
     }
@@ -85,13 +85,13 @@ public class FindCommand extends Command {
         for(int i = 0; i < this.tasks.size(); i++){
             Task task = this.tasks.get(i);
             System.out.println("  " + (i + 1) + "." + task.toString());
-            s = s + "\n" + "  " + (i + 1) + "." + task.toString();
+            s = s + "\n" + "  " + (i + 1) + "." + task.toString(); // concatenates all the Task present in tasks
         }
         return s;
     }
 
     private boolean wordsToFindAbsent(){
-        return commandDescription.length() == 4 || commandDescription.length() == 5;
+        return commandDescription.length() == 4 || commandDescription.length() == 5;  //since keywords present after length of 5
     }
 
 }

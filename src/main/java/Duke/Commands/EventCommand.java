@@ -42,10 +42,10 @@ public class EventCommand extends AddCommand{
         if (isDescriptionAbsent()) {
             throw new EventException(true, false, false, false, false);
         }
-        String[] dataSplit = splitData();
-        Event event = provide(dataSplit[0], dataSplit[1], dataSplit[2]);
+        String[] dataSplit = splitData(); //splits String into different of Event name, start and end time and/or date
+        Event event = provide(dataSplit[0], dataSplit[1], dataSplit[2]); //gives the event or throws exception
         try {
-            return updateTaskList(storage, event, tasks);
+            return updateTaskList(storage, event, tasks); //updates the Task list in Storage and TaskList since the Event is added
         } catch (IOException i) {
             throw new FileAbsentException(storage.getFilePath());
         }
@@ -57,7 +57,7 @@ public class EventCommand extends AddCommand{
      * @return true if description absent and false otherwise.
      */
     private boolean isDescriptionAbsent(){
-        return commandDescription.length() == 5 || commandDescription.length() == 6;
+        return commandDescription.length() == 5 || commandDescription.length() == 6; // since description is present after index 6
     }
     /**
      * splits the data into Deadline description and the Deadline date and/ or time. If the date and/or time is absent
@@ -71,13 +71,13 @@ public class EventCommand extends AddCommand{
         String s = "";
         int index = -1;
         int end = -1;
-        boolean duration = false;
-        boolean time = false;
+        boolean startPresent = false;
+        boolean endPresent = false;
         String start = "";
         for (int i = 5; i < commandDescription.length(); i++) {
             if (commandDescription.charAt(i) == '/') {
                 index = i;
-                time = true;
+                startPresent = true; //the presence of / indicates that the start time is present.
                 break;
             }
             s = s + commandDescription.charAt(i);
@@ -85,15 +85,15 @@ public class EventCommand extends AddCommand{
         for (int i = index + 1; i < commandDescription.length(); i++) {
             if (commandDescription.charAt(i) == '-' && i != commandDescription.length() - 1) {
                 end = i;
-                duration = true;
+                endPresent = true; // - indicates that end time is present
                 break;
             }
             start = start + commandDescription.charAt(i);
         }
-        if (!time) {
+        if (!startPresent) {
             throw new EventException(false, false, false, false, true);
         }
-        if (!duration) {
+        if (!endPresent) {
             throw new EventException(false, true, false, false, false);
         }
         String[] dataSplit = new String[3];
@@ -116,9 +116,10 @@ public class EventCommand extends AddCommand{
         Event e;
         try{
             LocalDate parsedDate = stringToLocalDate(start);
-            LocalDate endDate = stringToLocalDate(end);
+            LocalDate endDate = stringToLocalDate(end); //checks whether start and end can be converted to time and/or date.
+
             if(parsedDate.isAfter(endDate)){
-                throw new EventException(false, false, true, false, false);
+                throw new EventException(false, false, true, false, false); //if start > end then it throws this error.
             }
             e = new Event(name, parsedDate.format(DateTimeFormatter.ofPattern("dd LLL yyyy")),
                     endDate.format(DateTimeFormatter.ofPattern("dd LLL yyyy")));
