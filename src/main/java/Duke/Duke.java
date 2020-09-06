@@ -67,12 +67,12 @@ public class Duke {
             Command c = Parser.parse(input);
             try {
                 isExit = c.isExit();
-                output = output + "\n" + (i + 1) + ". " + c.execute(tasks, new Ui(), storage);
+                output = output + "\n" + (i + 1) + ". " + c.execute(tasks, new Ui(), storage); //concatenates output message
             } catch (DukeException e) {
-                output = output + "\n" + (i + 1) + ". " + e.getMessage();
+                output = output + "\n" + (i + 1) + ". " + e.getMessage();//concatenates error message
             }
         }
-        return output.substring(1);
+        return output.substring(1); //returns String
     }
     /**
      * gives main logic of the App,
@@ -88,7 +88,7 @@ public class Duke {
                 ui.showLine(); // show the divider line ("_______")
                 Command c = Parser.parse(fullCommand);
                 c.execute(tasks, ui, storage);
-                isExit = c.isExit();
+                isExit = c.isExit(); //if true exits program as bye is mentioned
             } catch (DukeException e) {
                 ui.showError(e.getMessage());
             } finally {
