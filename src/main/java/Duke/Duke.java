@@ -20,6 +20,32 @@ public class Duke {
     public Duke(){}
 
     /**
+     * Assigns the above member variables with the appropriate values, and throws certain exceptions if file in
+     * the filePath mentioned is empty or absent
+     *
+     * @param filePath represents where the filepath of where the file may exist.
+     */
+    public Duke(String filePath) {
+        ui = new Ui();
+        storage = new Storage(filePath);
+        try {
+            tasks = new TaskList(storage.load());
+        } catch (DukeException e) {
+            ui.showLoadingError(e);
+            tasks = new TaskList();
+        }
+    }
+    public Duke(String filePath, String input){
+        storage = new Storage(filePath);
+        try {
+            ui = new Ui(input);
+            tasks = new TaskList(storage.load());
+        } catch (DukeException e) {
+            ui.showLoadingError(e);
+            tasks = new TaskList();
+        }
+    }
+    /**
      * This gives the boolean value of isExit
      *
      * @return returns the value of isExit.
@@ -47,32 +73,6 @@ public class Duke {
             }
         }
         return output.substring(1);
-    }
-    /**
-     * Assigns the above member variables with the appropriate values, and throws certain exceptions if file in
-     * the filePath mentioned is empty or absent
-     *
-     * @param filePath represents where the filepath of where the file may exist.
-     */
-    public Duke(String filePath) {
-        ui = new Ui();
-        storage = new Storage(filePath);
-        try {
-            tasks = new TaskList(storage.load());
-        } catch (DukeException e) {
-            ui.showLoadingError(e);
-            tasks = new TaskList();
-        }
-    }
-    public Duke(String filePath, String input){
-        storage = new Storage(filePath);
-        try {
-            ui = new Ui(input);
-            tasks = new TaskList(storage.load());
-        } catch (DukeException e) {
-            ui.showLoadingError(e);
-            tasks = new TaskList();
-        }
     }
     /**
      * gives main logic of the App,

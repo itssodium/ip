@@ -22,9 +22,9 @@ public class Parser {
                 return new DeleteCommand(string);
             } else if (string.length() >= 4 && string.substring(0, 4).equals("done")) {
                 return new DoneCommand(string);
-            } else if (string.length() >= 4 && string.substring(0, 4).equals("ToDo")) {
+            } else if (string.length() >= 4 && string.substring(0, 4).equals("todo")) {
                 return new TodoCommand(string);
-            } else if (string.length() >= 5 && string.substring(0, 5).equals("Event")) {
+            } else if (string.length() >= 5 && string.substring(0, 5).equals("event")) {
                 return new EventCommand(string);
             } else if (string.length() >= 8 && string.substring(0, 8).equals("deadline")) {
                 return new DeadlineCommand(string);

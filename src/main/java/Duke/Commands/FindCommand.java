@@ -26,6 +26,32 @@ public class FindCommand extends Command {
     }
 
     /**
+     * Finds the tasks which contains keyword in string
+     *
+     * @param tasks to look for the task's string value
+     * @param ui
+     * @param storage no need
+     * @return String returns the string of the output that informs the find action is successful.
+     * @throws DukeException used to throw error when no words mentioned after find or the keyword is not present in
+     * tasks.
+     */
+    @Override
+    public String execute(TaskList tasks, Ui ui, Storage storage) throws DukeException {
+        if(wordsToFindAbsent()){
+            throw new FindException(false, true, "");
+        }else{
+            String find = commandDescription.substring(5);
+            String[] strings = find.split(" ", -2);
+            setTasks(strings, tasks);
+            if(this.tasks.size() == 0){
+                throw new FindException(true, false, find);
+            }else{
+                return findMessage();
+            }
+        }
+    }
+
+    /**
      * sets the Tasks list here with Tasks containing key words.
      *
      * @param strings contains String of key words
@@ -67,31 +93,7 @@ public class FindCommand extends Command {
     private boolean wordsToFindAbsent(){
         return commandDescription.length() == 4 || commandDescription.length() == 5;
     }
-    /**
-     * Finds the tasks which contains keyword in string
-     *
-     * @param tasks to look for the task's string value
-     * @param ui
-     * @param storage no need
-     * @return String returns the string of the output that informs the find action is successful.
-     * @throws DukeException used to throw error when no words mentioned after find or the keyword is not present in
-     * tasks.
-     */
-    @Override
-    public String execute(TaskList tasks, Ui ui, Storage storage) throws DukeException {
-        if(wordsToFindAbsent()){
-            throw new FindException(false, true, "");
-        }else{
-            String find = commandDescription.substring(5);
-            String[] strings = find.split(" ", -2);
-            setTasks(strings, tasks);
-            if(this.tasks.size() == 0){
-                throw new FindException(true, false, find);
-            }else{
-                return findMessage();
-            }
-        }
-    }
+
 }
 
 

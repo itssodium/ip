@@ -29,6 +29,29 @@ public class DeadlineCommand extends AddCommand {
     }
 
     /**
+     * to add deadline into a task list in TaskList
+     *
+     * @param tasks to change the taskList if necessary
+     * @param ui
+     * @param storage to change the file in the if necessary
+     * @return String returns the string of the output that informs the action is successful
+     * @throws DukeException whenever there is an error, where the time adn or date is absent or in wrong format, no
+     * description
+     */
+    public String execute(TaskList tasks, Ui ui, Storage storage) throws DukeException{
+        if (isDescriptionAbsent()) {
+            throw new DeadlineException(true, false, false);
+        }
+        String[] dataSplit = splitData();
+        Deadline d = deadlineTask(dataSplit[0], dataSplit[1]);
+        try {
+            return updateTaskList(storage, d, tasks);
+        }catch (IOException i){
+            throw new FileAbsentException(storage.getFilePath());
+        }
+    }
+
+    /**
      * checks whether the commandDescription contains the description
      *
      * @return true if description absent and false otherwise.
@@ -92,29 +115,6 @@ public class DeadlineCommand extends AddCommand {
             }
         }
         return e;
-    }
-
-    /**
-     * to add deadline into a task list in TaskList
-     *
-     * @param tasks to change the taskList if necessary
-     * @param ui
-     * @param storage to change the file in the if necessary
-     * @return String returns the string of the output that informs the action is successful
-     * @throws DukeException whenever there is an error, where the time adn or date is absent or in wrong format, no
-     * description
-     */
-    public String execute(TaskList tasks, Ui ui, Storage storage) throws DukeException{
-        if (isDescriptionAbsent()) {
-            throw new DeadlineException(true, false, false);
-        }
-        String[] dataSplit = splitData();
-        Deadline d = deadlineTask(dataSplit[0], dataSplit[1]);
-        try {
-            return updateTaskList(storage, d, tasks);
-        }catch (IOException i){
-            throw new FileAbsentException(storage.getFilePath());
-        }
     }
 
 }

@@ -24,11 +24,34 @@ public class TodoCommand extends AddCommand{
     }
 
     /**
+     * Adds deadline into a task list in TaskList.
+     *
+     * @param tasks to change the taskList if necessary
+     * @param ui
+     * @param storage to change the file in the if necessary
+     * @return String returns the string of the output that informs the action has been complete.
+     * @throws DukeException whenever there is an error, no
+     * description
+     */
+    public String execute(TaskList tasks, Ui ui, Storage storage) throws DukeException{
+        if (isDescriptionAbsent()) {
+            throw new TodoException();
+        } else {
+            try {
+                ToDo t = new ToDo(todoDescription());
+                return updateTaskList(storage, t, tasks);
+            }catch (IOException i){
+                throw new FileAbsentException(storage.getFilePath());
+            }
+        }
+    }
+
+    /**
      * checks whether the commandDescription contains the description
      *
      * @return true if description absent and false otherwise.
      */
-    private boolean descriptionAbsent(){
+    private boolean isDescriptionAbsent(){
         return commandDescription.length() == 4 || commandDescription.length() == 5;
     }
 
@@ -40,26 +63,5 @@ public class TodoCommand extends AddCommand{
     private String todoDescription(){
         return commandDescription.substring(5);
     }
-    /**
-     * Adds deadline into a task list in TaskList.
-     *
-     * @param tasks to change the taskList if necessary
-     * @param ui
-     * @param storage to change the file in the if necessary
-     * @return String returns the string of the output that informs the action has been complete.
-     * @throws DukeException whenever there is an error, no
-     * description
-     */
-    public String execute(TaskList tasks, Ui ui, Storage storage) throws DukeException{
-        if (descriptionAbsent()) {
-            throw new TodoException();
-        } else {
-            try {
-                ToDo t = new ToDo(todoDescription());
-                return updateTaskList(storage, t, tasks);
-            }catch (IOException i){
-                throw new FileAbsentException(storage.getFilePath());
-            }
-        }
-    }
+
 }
