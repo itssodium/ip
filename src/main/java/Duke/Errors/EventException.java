@@ -9,49 +9,57 @@ public class EventException extends DukeException {
      * description tests shows whether the description is present in the input of the user or not.
      * If description is not present it is true, else it is false
      */
-    private boolean descriptionAbsent;
-    private boolean endTimeAbsent;
-    private boolean startAfterEnd;
-    private boolean dateWrongFormat;
+    private boolean isDescriptionAbsent;
+    private boolean isEndTimeAbsent;
+    private boolean isStartAfterEnd;
+    private boolean isDateWrongFormat;
+    private boolean isDateEmpty;
 
+    private final String DESCRIPTIONABSENT = "  '\u2639' OOPS!!! The description of an Event cannot be empty.";
+    private final String ENDTIMEABSENT = "  '\u2639' OOPS!!! There should be 2 occurrences of date and/or time values.";
+    private final String STARTAFTEREND = "  '\u2639' OOPS!!! Start should be less than end.";
+    private final String DATEWRONGFORMAT = "  '\u2639' OOPS!!! Start and should be of the same format. The formats include " +
+            "yyyy MM dd/ yyyy MM dd, HH:mm/ HH:mm";
+    private final String DATEEMPTY = "  '\u2639' OOPS!!! The specific date of an Event cannot be empty.";
     /**
      *
-     * @param descriptionAbsent input, depending on whether the description is present or not in the input.txt file. If
-     *                          present it is false else it is true.
-     * @param endTimeAbsent is true when the user has no input for end time
-     * @param startAfterEnd is true when the start time is after end time
-     * @param dateWrongFormat is true when date is not input by the user.
+     * @param isDescriptionAbsent input, depending on whether the description is given by user.
+     * @param isEndTimeAbsent is true when the user has no input for end time
+     * @param isStartAfterEnd is true when the start time is after end time
+     * @param isDateWrongFormat is true when date is input in wrong format.
+     * @param isDateEmpty is true when date is input in wrong format
      */
-    public EventException(boolean descriptionAbsent, boolean endTimeAbsent, boolean startAfterEnd, boolean dateWrongFormat){
-        this.descriptionAbsent = descriptionAbsent;
-        this.endTimeAbsent = endTimeAbsent;
-        this.startAfterEnd = startAfterEnd;
-        this.dateWrongFormat = dateWrongFormat;
+    public EventException(boolean isDescriptionAbsent, boolean isEndTimeAbsent, boolean isStartAfterEnd,
+                          boolean isDateWrongFormat, boolean isDateEmpty){
+        this.isDescriptionAbsent = isDescriptionAbsent;
+        this.isEndTimeAbsent = isEndTimeAbsent;
+        this.isStartAfterEnd = isStartAfterEnd;
+        this.isDateWrongFormat = isDateWrongFormat;
+        this.isDateEmpty = isDateEmpty;
     }
 
     /**
      * doesn't take in any arguments, overrides the in-built toString() method.
-     *
      * @return returns a string informing that the description is empty if description is true.
-     * If endTime is absent is true, end time is absent and then a description mentioning this would be returned.
-     * Else, if startAfterEnd is true, start would be more than end then a description describing this would be printed
-     * Else if dateWrongFormat is true, then the date is in wrong format and a description describing it would be printed
-     * Else then the date is absent and then the description describing it would be printed.
+     * If isEndTimeAbsent is absent is true, end time is absent and then a description mentioning this would be returned.
+     * Else, if isStartAfterEnd is true, start would be more than end then a description describing this would be printed
+     * Else if ifDateWrongFormat is true, then the date is in wrong format and a description describing it would be printed
+     * Else if isDateEmpty is true, then String giving that is returned.
+     * Else default is returned.
      */
     public String toString(){
-        if(this.descriptionAbsent){
-            return "  '\u2639' OOPS!!! The description of an Event cannot be empty.";
+        if(this.isDescriptionAbsent){
+            return DESCRIPTIONABSENT;
+        }else if(this.isEndTimeAbsent) {
+            return ENDTIMEABSENT;
+        }else if(this.isStartAfterEnd) {
+            return STARTAFTEREND;
+        }else if(this.isDateWrongFormat) {
+            return DATEWRONGFORMAT;
+        }else if(this.isDateEmpty) {
+            return DATEEMPTY;
+        }else{
+            return "default";
         }
-        if(this.endTimeAbsent){
-            return "  '\u2639' OOPS!!! There should be 2 occurrences of date and/or time values.";
-        }
-        if(this.startAfterEnd){
-            return "  '\u2639' OOPS!!! Start should be less than end.";
-        }
-        if(this.dateWrongFormat){
-            return "  '\u2639' OOPS!!! Start and should be of the same format. The formats include " +
-                    "yyyy MM dd/ yyyy MM dd, HH:mm/ HH:mm";
-        }
-        return "  '\u2639' OOPS!!! The specific date of an Event cannot be empty." ;
     }
 }

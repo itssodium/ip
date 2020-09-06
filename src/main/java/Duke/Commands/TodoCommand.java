@@ -24,6 +24,23 @@ public class TodoCommand extends AddCommand{
     }
 
     /**
+     * checks whether the commandDescription contains the description
+     *
+     * @return true if description absent and false otherwise.
+     */
+    private boolean descriptionAbsent(){
+        return commandDescription.length() == 4 || commandDescription.length() == 5;
+    }
+
+    /**
+     * returns the name of the task
+     *
+     * @return name of task
+     */
+    private String todoDescription(){
+        return commandDescription.substring(5);
+    }
+    /**
      * Adds deadline into a task list in TaskList.
      *
      * @param tasks to change the taskList if necessary
@@ -34,11 +51,11 @@ public class TodoCommand extends AddCommand{
      * description
      */
     public String execute(TaskList tasks, Ui ui, Storage storage) throws DukeException{
-        if (commandDescription.length() == 4 || commandDescription.length() == 5) {
+        if (descriptionAbsent()) {
             throw new TodoException();
         } else {
             try {
-                ToDo t = new ToDo(commandDescription.substring(5));
+                ToDo t = new ToDo(todoDescription());
                 return updateTaskList(storage, t, tasks);
             }catch (IOException i){
                 throw new FileAbsentException(storage.getFilePath());

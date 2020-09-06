@@ -1,5 +1,6 @@
 package Duke.Commands;
 
+import Duke.Errors.DeadlineException;
 import Duke.Errors.DukeException;
 import Duke.Errors.EventException;
 import Duke.Errors.FileAbsentException;
@@ -27,63 +28,67 @@ public class EventCommand extends AddCommand{
     public EventCommand(String string) {
         super(string);
     }
-
-    private static Event provide(String name, String string, String end) throws DukeException {
+    /**
+     * This method creates a deadline task by checking whether the date and/or time given is in the correct
+     * format. If it is then Deadline task is returned else, DeadlineException is returned.
+     *
+     * @param name description of Deadline task
+     * @param start gives the dateTime of the start to check whether they are in the correct format
+     * @param end gives the dateTime of the end to check whether they are in the correct format
+     * @return deadline if the dateTime is in the correct format
+     * @throws DeadlineException if the dateTime is in the incorrect format
+     */
+    private static Event provide(String name, String start, String end) throws DukeException {
         Event e;
         try{
-            LocalDate parsedDate = stringToLocalDate(string);
+            LocalDate parsedDate = stringToLocalDate(start);
             LocalDate endDate = stringToLocalDate(end);
             if(parsedDate.isAfter(endDate)){
-                throw new EventException(false, false, true, false);
+                throw new EventException(false, false, true, false, false);
             }
             e = new Event(name, parsedDate.format(DateTimeFormatter.ofPattern("dd LLL yyyy")),
                     endDate.format(DateTimeFormatter.ofPattern("dd LLL yyyy")));
         }catch (EventException event){
-            throw new EventException(false, false, true, false);
+            throw new EventException(false, false, true, false, false);
         }catch (DateTimeException d) {
             try {
-                LocalDateTime parsedDate = stringToLocalDateTime(string);
+                LocalDateTime parsedDate = stringToLocalDateTime(start);
                 LocalDateTime endDate = stringToLocalDateTime(end);
                 if(parsedDate.isAfter(endDate)){
-                    throw new EventException(false, false, true, false);
+                    throw new EventException(false, false, true, false, false);
                 }
                 e = new Event(name, parsedDate.format(DateTimeFormatter.ofPattern("dd LLL yyyy, HH:mm")),
                         endDate.format(DateTimeFormatter.ofPattern("dd LLL yyyy, HH:mm")));
             } catch (EventException event){
-                throw new EventException(false, false, true, false);
+                throw new EventException(false, false, true, false, false);
             }
             catch (DateTimeException g) {
                 try {
-                    LocalTime parsedDate = stringToLocalTime(string);
+                    LocalTime parsedDate = stringToLocalTime(start);
                     LocalTime endDate = stringToLocalTime(end);
                     if(parsedDate.isAfter(endDate)){
-                        throw new EventException(false, false, true, false);
+                        throw new EventException(false, false, true, false, false);
                     }
                     e = new Event(name, parsedDate.format(DateTimeFormatter.ofPattern("HH:mm")),
                             endDate.format(DateTimeFormatter.ofPattern("HH:mm")));
                 }catch (EventException y){
-                    throw new EventException(false, false, true, false);
+                    throw new EventException(false, false, true, false, false);
                 }catch (DateTimeException z) {
-                    throw new EventException(false, false, false, true);
+                    throw new EventException(false, false, false, true, false);
                 }
             }
         }
         return e;
     }
-
     /**
-     * Adds Event task or handle exceptions
+     * splits the data into Deadline description and the Deadline date and/ or time. If the date and/or time is absent
+     * then DeadlineException is thrown.
      *
-     * @param tasks to change the taskList if necessary when no error
-     * @param ui
-     * @param storage to change the file in the if necessary when no error
-     * @return String returns the string of the output that informs the action has been complete.
-     * @throws DukeException if there no description after Event no time or time is wrong format
+     * @return the String array where the first String is the name of the Deadline and the second is the date and/or time
+     * of start for event, third is the date and/or time of end for event.
+     * @throws EventException thrown when the time and/or date is absent.
      */
-    public String execute(TaskList tasks, Ui ui, Storage storage) throws DukeException {
-        if (commandDescription.length() == 5 || commandDescription.length() == 6) {
-            throw new EventException(true, false, false, false);
-        }
+    private String[] splitData() throws EventException {
         String s = "";
         int index = -1;
         int end = -1;
@@ -107,15 +112,44 @@ public class EventCommand extends AddCommand{
             start = start + commandDescription.charAt(i);
         }
         if (!time) {
-            throw new EventException(false, false, false, false);
+            throw new EventException(false, false, false, false, true);
         }
         if (!duration) {
-            throw new EventException(false, true, false, false);
+            throw new EventException(false, true, false, false, false);
         }
-        Event d = provide(s.substring(1, s.length() - 1), commandDescription.substring(index + 4, end), commandDescription.substring(end + 1));
-        try {
-            return updateTaskList(storage, d, tasks);
+        String[] dataSplit = new String[3];
+        dataSplit[0] = s.substring(1, s.length() - 1);
+        dataSplit[1] = commandDescription.substring(index + 4, end);
+        dataSplit[2] = commandDescription.substring(end + 1);
+        return dataSplit;
+    }
 
+    /**
+     * checks whether the commandDescription contains the description
+     *
+     * @return true if description absent and false otherwise.
+     */
+    private boolean descriptionAbsent(){
+        return commandDescription.length() == 5 || commandDescription.length() == 6;
+    }
+
+    /**
+     * Adds Event task or handle exceptions
+     *
+     * @param tasks to change the taskList if necessary when no error
+     * @param ui
+     * @param storage to change the file in the if necessary when no error
+     * @return String returns the string of the output that informs the action has been complete.
+     * @throws DukeException if there no description after Event no time or time is wrong format
+     */
+    public String execute(TaskList tasks, Ui ui, Storage storage) throws DukeException {
+        if (descriptionAbsent()) {
+            throw new EventException(true, false, false, false, false);
+        }
+        String[] dataSplit = splitData();
+        Event event = provide(dataSplit[0], dataSplit[1], dataSplit[2]);
+        try {
+            return updateTaskList(storage, event, tasks);
         } catch (IOException i) {
             throw new FileAbsentException(storage.getFilePath());
         }

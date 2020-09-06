@@ -9,28 +9,38 @@ public class DoneException extends DukeException{
      * IDabsent tests shows whether the ID is present in the input of the user or not.
      * If ID is not present it is true, else it is false
      */
-    private boolean IDabsent;
+    private boolean isIDAbsent;
+    private boolean isNotIDDefined;
+
+    private final String IDABSENT = "  '\u2639' OOPS!!! The description of done cannot be empty.";
+    private final String IDNOTDEFINED = "  '\u2639' OOPS!!! The ID is not yet defined.";
 
     /**
      * constructor that assigns tne 2 variables its respective values
-     * @param IDabsent input, depending on whether the ID is present or not in the input.txt file. If present it is false
+     * @param isIDabsent input, depending on whether the ID is present or not in the input.txt file. If present it is false
      *   else it is true.
+     * @param isNOtIDDefined input, true if ID > number of tasks present, false otherwise.
      */
-    public DoneException(boolean IDabsent){
-        this.IDabsent = IDabsent;
+    public DoneException(boolean isIDabsent, boolean isNOtIDDefined){
+        this.isIDAbsent = isIDabsent;
+        this.isNotIDDefined = isNOtIDDefined;
     }
 
     /**
      * doesn't take in any arguments, overrides the in-built toString() method.
      *
      * @return returns a string depending on the scenario. If the IDabsent is true, then description that the description of
-     * done cannot be empty. Else, it means that the ID, of the Task given is not defined yet.
+     * done cannot be empty.Else if isDefined is true then String returning that ID is not defined is returned. Else,
+     *  default is returned which should not occur.
      */
     @Override
     public String toString() {
-        if(IDabsent){
-            return "  '\u2639' OOPS!!! The description of a done cannot be empty.";
+        if(isIDAbsent){
+            return IDABSENT;
+        }else if(isNotIDDefined){
+            return IDNOTDEFINED;
+        }else {
+            return "default";
         }
-        return "  '\u2639' OOPS!!! The ID is not yet defined.";
     }
 }

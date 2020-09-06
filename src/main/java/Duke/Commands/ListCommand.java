@@ -19,6 +19,21 @@ public class ListCommand extends Command {
     }
 
     /**
+     * gives the message when list is called.
+     *
+     * @param tasks gives the current list, which is used to return current list
+     * @return all the current list
+     */
+    private String listMessage(TaskList tasks){
+        String s = "";
+        for(int i = 0; i < tasks.getAllTasks().size(); i++){
+            System.out.println("  " + tasks.getAllTasks().get(i));
+            s = s + "\n" + "  " + tasks.getAllTasks().get(i);
+        }
+        return s;
+    }
+
+    /**
      * Lists all the tasks that are currently present in the tasks.
      *
      * @param tasks to access the list and print them
@@ -28,12 +43,7 @@ public class ListCommand extends Command {
      * @throws DukeException
      */
     public String execute(TaskList tasks, Ui ui, Storage storage) throws DukeException {
-        String s = "";
-        for(int i = 0; i < tasks.getAllTasks().size(); i++){
-            System.out.println("  " + tasks.getAllTasks().get(i));
-            s = s + "\n" + "  " + tasks.getAllTasks().get(i);
-        }
-        return s;
+        return listMessage(tasks);
     }
 
 }
