@@ -19,7 +19,7 @@ public class FIleEmptyException extends DukeException {
      *
      * @return informs user that file is empty
      */
-    public String fileEmpty(){
+    private String fileEmpty(){
         return "  Task file is empty!";
     }
 }

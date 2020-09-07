@@ -52,7 +52,7 @@ public class FindException extends DukeException {
      *
      * @return String that the keywords are absent.
      */
-    public String descriptionAbsent(){
+    private String descriptionAbsent(){
         return "  description of find cannot be empty!";
     }
 }

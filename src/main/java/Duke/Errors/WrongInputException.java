@@ -18,7 +18,7 @@ public class WrongInputException extends DukeException {
      *
      * @return String that the user has mentioned something that the Duke cannot understand
      */
-    public String wrongInputString(){
+    private String wrongInputString(){
         return "  '\u2639 OOPS!!! I'm sorry, but I don't know what that means :-(";
     }
 }

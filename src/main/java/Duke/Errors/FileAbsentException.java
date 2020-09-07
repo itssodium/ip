@@ -30,7 +30,7 @@ public class FileAbsentException extends DukeException {
      *
      * @return String saying that file is absent.
      */
-    public String fileAbsent(){
+    private String fileAbsent(){
         return "  The file in this directory " + this.isFilePathAbsent + " is absent!";
     }
 }

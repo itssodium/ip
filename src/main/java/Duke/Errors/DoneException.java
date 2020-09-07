@@ -33,24 +33,29 @@ public class DoneException extends DukeException{
     @Override
     public String toString() {
         if(isIDAbsent){
-            return iDAbsent();
+            return iDAbsent(); //when ID is absent
         }else if(isNotIDDefined){
-            return iDNotDefined();
+            return iDNotDefined(); //when ID is not defined
         }else {
             return "default";
         }
     }
 
     /**
+     * Returns when iD is not given by user
      *
-     *
-     * @return
+     * @return String saying that description of done(a number) cannot be empty
      */
-    public String iDAbsent(){
+    private String iDAbsent(){
         return "  '\u2639' OOPS!!! The description of done cannot be empty.";
     }
 
-    public String iDNotDefined(){
+    /**
+     * Returns when ID input by user is not defined yet
+     *
+     * @return String saying that ID is not defined.
+     */
+    private String iDNotDefined(){
         return "  '\u2639' OOPS!!! The ID is not yet defined.";
     }
 }

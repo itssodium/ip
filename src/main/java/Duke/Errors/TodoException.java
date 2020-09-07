@@ -19,7 +19,7 @@ public class TodoException extends DukeException {
      *
      * @return String informign user that the description of ToDo cannot be empty.
      */
-    public String descriptionAbsent(){
+    private String descriptionAbsent(){
         return "  '\u2639' OOPS!!! The description of a ToDo cannot be empty";
     }
 }
