@@ -69,7 +69,7 @@ public class DoneCommand extends Command {
      * @param storage which contains file to be changed.
      * @throws FileAbsentException when the file to be updated is absent in Storage.
      */
-    private void updateTaskList(String newList, Storage storage) throws FileAbsentException {
+    private void updateTaskInStorage(String newList, Storage storage) throws FileAbsentException {
         try {
             FileWriter fw = new FileWriter(storage.getFilePath());
             fw.write(newList); //updates task list to newList since one task is marked as done
@@ -83,14 +83,12 @@ public class DoneCommand extends Command {
      * gives the string for the new task list
      *
      * @param tasks marks the task as done
-     * @param ID of the task to be marked as done
      * @return the string for the new task list
      */
-    private String newTaskList(TaskList tasks, int ID){
-        tasks.getAllTasks().get(ID - 1).setDone(true);
+    private String newInputInStorageFIle(TaskList tasks){
         String s = "";
         for(int i = 0; i < tasks.getAllTasks().size(); i++){
-            s = s + tasks.getAllTasks().get(i).inputListFormat() + "\n"; //new taskList String since done
+            s = s + tasks.getAllTasks().get(i).inputListFormat() + "\n"; //new taskList String since done is being set for task with ID mentioned by user
         }
         return s;
     }
@@ -116,10 +114,10 @@ public class DoneCommand extends Command {
      * @throws DukeException throws if file is absent
      */
     private String rewrite(Storage storage, TaskList tasks, int ID) throws DukeException {
-        tasks.getAllTasks().get(ID - 1).setDone(true);
-        String s = newTaskList(tasks, ID); //new List for storage file
+        tasks.getAllTasks().get(ID - 1).setDone(true); //sets the task at (ID - 1) as done
+        String s = newInputInStorageFIle(tasks); //new List for storage file
         try {
-            updateTaskList(s, storage); //updates the TaskList and the file in storage file
+            updateTaskInStorage(s, storage); //updates the TaskList and the file in storage file
             return doneMessage(tasks, ID); // returns done message
         } catch (FileAbsentException f) {
             throw new FileAbsentException(storage.getFilePath());

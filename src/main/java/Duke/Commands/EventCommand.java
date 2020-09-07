@@ -115,34 +115,34 @@ public class EventCommand extends AddCommand{
     private static Event provide(String name, String start, String end) throws DukeException {
         Event e;
         try{
-            LocalDate parsedDate = stringToLocalDate(start);
-            LocalDate endDate = stringToLocalDate(end); //checks whether start and end can be converted to time and/or date.
+            LocalDate startDate = stringToLocalDate(start); //converts start to date
+            LocalDate endDate = stringToLocalDate(end); //converts end to date
 
-            if(parsedDate.isAfter(endDate)){
+            if(startDate.isAfter(endDate)){
                 throw new EventException(false, false, true, false, false); //if start > end then it throws this error.
             }
-            e = new Event(name, parsedDate.format(DateTimeFormatter.ofPattern("dd LLL yyyy")),
+            e = new Event(name, startDate.format(DateTimeFormatter.ofPattern("dd LLL yyyy")),
                     endDate.format(DateTimeFormatter.ofPattern("dd LLL yyyy")));
         }catch (EventException event){
             throw new EventException(false, false, true, false, false);
         }catch (DateTimeException d) {
             try {
-                LocalDateTime parsedDate = stringToLocalDateTime(start);
-                LocalDateTime endDate = stringToLocalDateTime(end);
-                if(parsedDate.isAfter(endDate)){
-                    throw new EventException(false, false, true, false, false);
+                LocalDateTime startDateTime = stringToLocalDateTime(start);//converts start to dateTime
+                LocalDateTime endDateTime = stringToLocalDateTime(end);//converts end to dateTime
+                if(startDateTime.isAfter(endDateTime)){
+                    throw new EventException(false, false, true, false, false); //if start > end it throws this error
                 }
-                e = new Event(name, parsedDate.format(DateTimeFormatter.ofPattern("dd LLL yyyy, HH:mm")),
-                        endDate.format(DateTimeFormatter.ofPattern("dd LLL yyyy, HH:mm")));
+                e = new Event(name, startDateTime.format(DateTimeFormatter.ofPattern("dd LLL yyyy, HH:mm")),
+                        endDateTime.format(DateTimeFormatter.ofPattern("dd LLL yyyy, HH:mm")));
             } catch (EventException event){
                 throw new EventException(false, false, true, false, false);
             }
             catch (DateTimeException g) {
                 try {
-                    LocalTime parsedDate = stringToLocalTime(start);
-                    LocalTime endDate = stringToLocalTime(end);
+                    LocalTime parsedDate = stringToLocalTime(start);//converts start to time
+                    LocalTime endDate = stringToLocalTime(end);//converts end to time
                     if(parsedDate.isAfter(endDate)){
-                        throw new EventException(false, false, true, false, false);
+                        throw new EventException(false, false, true, false, false);//if start > end it throws error
                     }
                     e = new Event(name, parsedDate.format(DateTimeFormatter.ofPattern("HH:mm")),
                             endDate.format(DateTimeFormatter.ofPattern("HH:mm")));

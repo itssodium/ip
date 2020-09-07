@@ -85,7 +85,7 @@ public class DeleteCommand extends Command {
      * @param storage which contains file to be changed
      * @throws FileAbsentException when the file to be updated is absent in Storage
      */
-    private void updateTaskList(String newList, Storage storage) throws FileAbsentException {
+    private void updateTaskInStorage(String newList, Storage storage) throws FileAbsentException {
         try {
             FileWriter fw = new FileWriter(storage.getFilePath()); //updates the file in Storage with new String
             fw.write(newList);
@@ -98,12 +98,10 @@ public class DeleteCommand extends Command {
     /**
      * gives the string for the new task list
      *
-     * @param tasks removes the tasks to remove in TaskList.
-     * @param ID of the task to remove
+     * @param tasks contains current tasks
      * @return the string for the new task list
      */
-    private String newTaskList(TaskList tasks, int ID){
-        tasks.getAllTasks().remove(ID - 1);
+    private String newInputInStorageFIle(TaskList tasks){
         String s = "";
         for(int i = 0; i < tasks.getAllTasks().size(); i++){
             s = s + tasks.getAllTasks().get(i).inputListFormat() + "\n"; // Task of ID is deleted and then the String of tasks is updated
@@ -111,6 +109,15 @@ public class DeleteCommand extends Command {
         return s;
     }
 
+    /**
+     * Removes task that has to be deleted from TaskList
+     *
+     * @param tasks where task with index (ID - 1) is removed
+     * @param ID gives information on which task to remove.
+     */
+    private void deleteTaskInTaskList(TaskList tasks, int ID){
+        tasks.getAllTasks().remove(ID - 1); //removes task with ID from task
+    }
     /**
      * This returns the string that the task has been deleted adn also updated the TakList.
      *
@@ -121,9 +128,10 @@ public class DeleteCommand extends Command {
      * @throws DukeException throws if file is absent
      */
     private String rewrite(Storage storage, TaskList tasks, int ID)  throws DukeException{
-        String newTaskList = newTaskList(tasks, ID);
+        deleteTaskInTaskList(tasks, ID); //deleted the task with ID in TaskList
+        String newTaskList = newInputInStorageFIle(tasks); //gives new file input and deletes
         try {
-            updateTaskList(newTaskList, storage);
+            updateTaskInStorage(newTaskList, storage); //replaces old list in storage file with this
             System.out.println(deleteTaskString(tasks, ID));
             return deleteTaskString(tasks, ID);
         } catch (FileAbsentException f) {
