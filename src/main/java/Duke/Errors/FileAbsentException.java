@@ -6,7 +6,6 @@ package Duke.Errors;
 public class FileAbsentException extends DukeException {
     private String isFilePathAbsent;
 
-    private String FILEABSENT = "  The file in this directory " + this.isFilePathAbsent + " is absent!";
     /**
      * This assigns filePath variable to a value
      *
@@ -23,6 +22,15 @@ public class FileAbsentException extends DukeException {
      */
     @Override
     public String toString() {
-        return FILEABSENT;
+        return fileAbsent(); //when file is absent
+    }
+
+    /**
+     * Returns when file is not present
+     *
+     * @return String saying that file is absent.
+     */
+    public String fileAbsent(){
+        return "  The file in this directory " + this.isFilePathAbsent + " is absent!";
     }
 }

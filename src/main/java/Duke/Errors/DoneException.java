@@ -12,9 +12,6 @@ public class DoneException extends DukeException{
     private boolean isIDAbsent;
     private boolean isNotIDDefined;
 
-    private final String IDABSENT = "  '\u2639' OOPS!!! The description of done cannot be empty.";
-    private final String IDNOTDEFINED = "  '\u2639' OOPS!!! The ID is not yet defined.";
-
     /**
      * constructor that assigns tne 2 variables its respective values
      * @param isIDabsent input, depending on whether the ID is present or not in the input.txt file. If present it is false
@@ -36,11 +33,24 @@ public class DoneException extends DukeException{
     @Override
     public String toString() {
         if(isIDAbsent){
-            return IDABSENT;
+            return iDAbsent();
         }else if(isNotIDDefined){
-            return IDNOTDEFINED;
+            return iDNotDefined();
         }else {
             return "default";
         }
+    }
+
+    /**
+     *
+     *
+     * @return
+     */
+    public String iDAbsent(){
+        return "  '\u2639' OOPS!!! The description of done cannot be empty.";
+    }
+
+    public String iDNotDefined(){
+        return "  '\u2639' OOPS!!! The ID is not yet defined.";
     }
 }

@@ -11,23 +11,19 @@ public class DeadlineException extends DukeException{
      * If description is not present it is true, else it is false
      */
     private boolean isDescriptionAbsent;
-    private boolean isFormatWrong;
+    private boolean isDateTimeFormatWrong;
     private boolean isDateTimeAbsent;
 
-    private final String DESCRIPTIONABSENT = "  '\u2639' OOPS!!! The description of a deadline cannot be empty.";
-    private final String FORMATWRONG = "  '\u2639' OOPS!!! The formats of date and/ or include " +
-            "yyyy MM dd/ yyyy MM dd, HH:mm/ HH:mm";
-    private final  String DATETIMEABSENT = "  '\u2639' OOPS!!! The specific date/time of a deadline cannot be empty.";
     /**
      * constructor for deadline exception that assigns description and format values
      *
      * @param isDescriptionAbsent true if description absent
-     * @param isFormatWrong true if format is wrong
+     * @param isDateTimeFormatWrong true if format is wrong
      * @param isDateTimeAbsent true if date and time are absent.
      */
-    public DeadlineException(boolean isDescriptionAbsent, boolean isFormatWrong, boolean isDateTimeAbsent){
+    public DeadlineException(boolean isDescriptionAbsent, boolean isDateTimeFormatWrong, boolean isDateTimeAbsent){
         this.isDescriptionAbsent = isDescriptionAbsent;
-        this.isFormatWrong = isFormatWrong;
+        this.isDateTimeFormatWrong = isDateTimeFormatWrong;
         this.isDateTimeAbsent = isDateTimeAbsent;
     }
 
@@ -41,13 +37,41 @@ public class DeadlineException extends DukeException{
      */
     public String toString(){
         if(this.isDescriptionAbsent) {
-            return DESCRIPTIONABSENT;
-        } else if(this.isFormatWrong) {
-            return FORMATWRONG;
+            return descriptionAbsent(); //when descriptionAbsent
+        } else if(this.isDateTimeFormatWrong) {
+            return dateTimeFormatWrong(); //when dateTimeFormat is wrong
         } else if(this.isDateTimeAbsent) {
-            return DATETIMEABSENT;
+            return dateTimeAbsent(); //when dateTime is absent
         } else {
             return "default";
         }
+    }
+
+    /**
+     * returns String on condition where description for Deadline is absent
+     *
+     * @return String informing user that the description for Deadline is absent
+     */
+    private String descriptionAbsent(){
+        return "  '\u2639' OOPS!!! The description of a deadline cannot be empty.";
+    }
+
+    /**
+     * returns String on condition where format for date and/or time format for Deadline is wrong
+     *
+     * @return String informing user format for date and/or time format for Deadline is wrong
+     */
+    private String dateTimeFormatWrong(){
+        return "  '\u2639' OOPS!!! The formats of date and/ or include " +
+                "yyyy MM dd/ yyyy MM dd, HH:mm/ HH:mm";
+    }
+
+    /**
+     * returns String on condition where date and/or time for Deadline is absent
+     *
+     * @return String informing user that the date and/or time for Deadline is absent
+     */
+    private String dateTimeAbsent(){
+        return "  '\u2639' OOPS!!! The specific date/time of a deadline cannot be empty.";
     }
 }

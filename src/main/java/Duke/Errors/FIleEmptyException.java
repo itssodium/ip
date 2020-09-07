@@ -4,7 +4,6 @@ package Duke.Errors;
  * This exception is thrown when the file is empty
  */
 public class FIleEmptyException extends DukeException {
-    private final String FILEEMPTY = "Task file is empty!";
     /**
      * this overrides the toString() method
      *
@@ -12,6 +11,15 @@ public class FIleEmptyException extends DukeException {
      */
     @Override
     public String toString() {
-        return FILEEMPTY;
+        return fileEmpty(); //when file is empty
+    }
+
+    /**
+     * Returns when file is empty
+     *
+     * @return informs user that file is empty
+     */
+    public String fileEmpty(){
+        return "  Task file is empty!";
     }
 }

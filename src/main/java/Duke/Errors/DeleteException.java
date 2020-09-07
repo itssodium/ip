@@ -13,8 +13,6 @@ public class DeleteException extends DukeException {
     private boolean isIDAbsent;
     private boolean isNotIDDefined;
 
-    private final String IDABSENT = "  '\u2639' OOPS!!! The description of delete cannot be empty.";
-    private final String IDNOTDEFINED = "  '\u2639' OOPS!!! The ID is not yet defined.";
     /**
      * constructor that assigns tne 2 variables its respective values
      *
@@ -36,11 +34,29 @@ public class DeleteException extends DukeException {
     @Override
     public String toString() {
         if(isIDAbsent){
-            return IDABSENT;
+            return iDAbsent(); //when ID is not input by user
         }else if(isNotIDDefined){
-            return IDNOTDEFINED;
+            return iDNotDefined(); //when ID is not defined yet
         }else {
             return "default";
         }
+    }
+
+    /**
+     * returns on condition when user didn't mention the task ID to delete
+     *
+     * @return String informing user that ID of task to be deleted is not mentioned
+     */
+    private String iDAbsent(){
+        return "  '\u2639' OOPS!!! The description of delete cannot be empty.";
+    }
+
+    /**
+     * returns on condition when the ID is more than the number of tasks present
+     *
+     * @return String informing user that ID of task to be deleted is not defined yet.
+     */
+    private String iDNotDefined(){
+        return "  '\u2639' OOPS!!! The ID is not yet defined.";
     }
 }

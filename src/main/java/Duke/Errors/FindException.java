@@ -8,8 +8,6 @@ public class FindException extends DukeException {
     private boolean isDescriptionAbsent;
     private String description;
 
-    private final String NOMATCHES = "there are no matches to your keyword: " + description;
-    private final String DESCRIPTIONABSENT = "description of find cannot be empty!";
     /**
      * constructor assigns values of description and string
      *
@@ -32,11 +30,29 @@ public class FindException extends DukeException {
      */
     public String toString(){
         if(noMatches){
-            return NOMATCHES;
+            return noMatches(); //when there are no matches
         } else if(isDescriptionAbsent) {
-            return DESCRIPTIONABSENT;
+            return descriptionAbsent(); //when description is absent
         } else{
             return "default";
         }
+    }
+
+    /**
+     * Returns when there are no matches for the keywords given
+     *
+     * @return String that there are no matches to the keywords given
+     */
+    public String noMatches(){
+        return "  there are no matches to your keyword: " + description;
+    }
+
+    /**
+     * Returns when there are no keywords given by user
+     *
+     * @return String that the keywords are absent.
+     */
+    public String descriptionAbsent(){
+        return "  description of find cannot be empty!";
     }
 }
